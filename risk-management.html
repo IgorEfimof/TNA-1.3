@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon231.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TNAPRF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0e17">
+    <title>Risk Management - TT Analyzer 7.0</title>
+
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --card: #13182b;
+            --card-secondary: #1a2140;
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.3);
+            --profit: #10b981;
+            --profit-glow: rgba(16, 185, 129, 0.2);
+            --risk: #f59e0b;
+            --risk-glow: rgba(245, 158, 11, 0.2);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.2);
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #2d3756;
+            --gradient: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            --profit-gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            --risk-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 430px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 10px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header .beta-badge {
+            display: inline-block;
+            background: var(--accent-glow);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Navigation */
+        .info-nav {
+            display: flex;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 4px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .info-nav-btn {
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+        }
+
+        .info-nav-btn:hover {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+        }
+
+        .info-nav-btn.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            color: var(--text);
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--card-secondary);
+            transform: translateX(-4px);
+        }
+
+        /* Info page specific */
+        .info-content {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .info-section {
+            margin-bottom: 32px;
+        }
+
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .info-subtitle {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .info-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .info-list {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-list li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: var(--card-secondary);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .info-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .risk-level.low {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--profit);
+        }
+
+        .risk-level.medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--risk);
+        }
+
+        .risk-level.high {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px 0;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 32px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .footer-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        @media (max-width: 430px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .container {
+                padding: 16px 12px 32px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>TT Analyzer 7.0</h1>
+            <p>Professional Risk Management System</p>
+            <div class="beta-badge">RISK MANAGEMENT</div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="info-nav">
+            <a href="risk-management.html" class="info-nav-btn active">Risk Management</a>
+            <a href="documentation.html" class="info-nav-btn">Documentation</a>
+            <a href="support.html" class="info-nav-btn">Support</a>
+        </div>
+
+        <!-- Back button -->
+        <a href="index.html" class="back-btn">
+            <span>←</span> Вернуться к сканеру
+        </a>
+
+        <!-- Main Content -->
+        <div class="info-content slide-in">
+            <div class="info-section">
+                <h2 class="info-title">🛡️ Система управления рисками</h2>
+                <p class="info-text">
+                    Профессиональная система управления рисками TT Analyzer 7.0 разработана для 
+                    минимизации потерь и максимизации прибыли при торговле на спортивных рынках. 
+                    Система использует 12 алгоритмов оценки рисков в реальном времени.
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h3 class="info-subtitle">📊 Уровни риска</h3>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="risk-level low">НИЗКИЙ РИСК</div>
+                        <h4>Консервативная стратегия</h4>
+                        <p>Ставки с перекосом ≥15% и вероятностью ≥75%. Максимальная ставка: 3% от банка.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="risk-level medium">СРЕДНИЙ РИСК</div>
+                        <h4>Балансированная стратегия</h4>
+                        <p>Ставки с перекосом 8-15% и вероятностью 60-75%. Максимальная ставка: 2% от банка.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="risk-level high">ВЫСОКИЙ РИСК</div>
+                        <h4>Агрессивная стратегия</h4>
+                        <p>Ставки с перекосом &lt;8% или коэффициентом ≥2.5. Максимальная ставка: 1% от банка.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="risk-level low">АРБИТРАЖ</div>
+                        <h4>Безрисковые операции</h4>
+                        <p>Арбитражные ситуации с гарантированной прибылью. Ставка рассчитывается автоматически.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3 class="info-subtitle">🎯 Критерий Келли (оптимизированный)</h3>
+                <p class="info-text">
+                    Система использует модифицированный критерий Келли с учетом 7 факторов:
+                </p>
+                <ul class="info-list">
+                    <li>Вероятность успеха (на основе перекоса рынка)</li>
+                    <li>Коэффициент ставки</li>
+                    <li>Ликвидность рынка</li>
+                    <li>Волатильность матча</li>
+                    <li>Время до завершения события</li>
+                    <li>Историческая эффективность стратегии</li>
+                    <li>Текущее состояние банка</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3 class="info-subtitle">📈 Матрица управления банком</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>Банк: ≤ $1,000</h4>
+                        <p>Макс. ставка: 2%<br>Цель ROI: 15%<br>Риск-профиль: Консервативный</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h4>Банк: $1,000-$5,000</h4>
+                        <p>Макс. ставка: 1.5%<br>Цель ROI: 12%<br>Риск-профиль: Балансированный</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h4>Банк: $5,000-$20,000</h4>
+                        <p>Макс. ставка: 1%<br>Цель ROI: 10%<br>Риск-профиль: Диверсифицированный</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h4>Банк: ≥ $20,000</h4>
+                        <p>Макс. ставка: 0.5%<br>Цель ROI: 8%<br>Риск-профиль: Консервативный</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3 class="info-subtitle">🛡️ Защитные механизмы</h3>
+                <p class="info-text">
+                    Система включает 5 уровней защиты от потерь:
+                </p>
+                <ul class="info-list">
+                    <li><strong>Daily Loss Limit</strong> - Автоматическая остановка при достижении дневного лимита потерь</li>
+                    <li><strong>Drawdown Protection</strong> - Снижение размера ставок при серии неудач</li>
+                    <li><strong>Market Volatility Filter</strong> - Фильтр волатильных рынков</li>
+                    <li><strong>Liquidity Check</strong> - Проверка ликвидности перед размещением</li>
+                    <li><strong>Time Decay Protection</strong> - Автоотмена ставок при изменении условий</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3 class="info-subtitle">📊 Мониторинг эффективности</h3>
+                <p class="info-text">
+                    Система ведет детальную статистику по 28 параметрам:
+                </p>
+                <ul class="info-list">
+                    <li>Общая прибыль/убыток</li>
+                    <li>ROI (Return on Investment)</li>
+                    <li>Sharpe Ratio (риск-скорректированная доходность)</li>
+                    <li>Максимальная просадка (Max Drawdown)</li>
+                    <li>Винрейт (Win Rate)</li>
+                    <li>Средний коэффициент выигрышных ставок</li>
+                    <li>Распределение по типам ставок</li>
+                    <li>Эффективность по видам спорта</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 TT Analyzer 7.0 • Professional Risk Management</p>
+        <p>Только для профессионального использования • Разработчик Ефимов И.Г.</p>
+        <div class="footer-links">
+            <a href="risk-management.html" class="footer-link">Risk Management</a>
+            <a href="documentation.html" class="footer-link">Documentation</a>
+            <a href="support.html" class="footer-link">Support</a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.info-card, .info-section');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+                el.classList.add('slide-in');
+            });
+        });
+    </script>
+</body>
+</html>
